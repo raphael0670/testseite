@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahlenraten-Spiel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #222;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.8em;
+        }
+
+        .game-container {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(138, 77, 191, 0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #c0a3e5;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+
+        input, select, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 1em;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button {
+            background-color: #8a4dbf;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #72389e;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: #50fa7b;
+        }
+
+        .message.error {
+            color: #ff5555;
+        }
+
+        /* Glücksrad Styling */
+        .wheel-container {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        #wheel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid #8a4dbf;
+            background: conic-gradient(
+                #50fa7b 0deg 180deg, /* Gewinnbereich */
+                #ff5555 180deg 360deg /* Verlustbereich */
+            );
+            position: relative;
+            margin: 0 auto;
+            transition: transform 3s ease-out;
+        }
+
+        #arrow {
+            position: relative;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #fff;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #bbb;
+        }
+
+        a {
+            color: #8a4dbf;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #c0a3e5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        Zahlenraten-Spiel
+    </header>
+
+    <!-- Spielcontainer -->
+    <div class="game-container">
+        <h2>Errate die Zahl!</h2>
+        <p>Gib eine Zahl zwischen 1 und 10 ein oder wähle sie aus dem Dropdown:</p>
+        
+        <!-- Manuelle Eingabe -->
+        <input type="number" id="guess-input" placeholder="Zahl eingeben" min="1" max="10">
+
+        <!-- Dropdown-Menü -->
+        <select id="guess-dropdown">
+            <option value="" disabled selected>Zahl auswählen</option>
+            <script>
+                for (let i = 1; i <= 10; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select>
+
+        <!-- Rate-Button -->
+        <button onclick="checkGuess()">Rate!</button>
+        <div id="message" class="message"></div>
+
+        <!-- Glücksrad -->
+        <div class="wheel-container" id="wheel-container">
+            <h3>Glücksrad - Zweite Chance!</h3>
+            <div id="arrow"></div>
+            <div id="wheel"></div>
+            <button onclick="spinWheel()">Drehen!</button>
+            <div id="wheel-message" class="message"></div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Zurück zur Hauptseite</a>
+    </footer>
+
+    <script>
+        const wheelContainer = document.getElementById("wheel-container");
+
+        function checkGuess() {
+            const inputField = document.getElementById("guess-input").value;
+            const dropdownField = document.getElementById("guess-dropdown").value;
+            const message = document.getElementById("message");
+
+            const userGuess = inputField || dropdownField;
+
+            if (!userGuess) {
+                message.textContent = "Bitte gib eine Zahl ein oder wähle sie aus dem Dropdown!";
+                message.className = "message error";
+                return;
+            }
+
+            if (Math.random() < 0.5) { // 50% Gewinnchance
+                message.textContent = "🎉 Glückwunsch! Du hast gewonnen!";
+                message.className = "message success";
+                wheelContainer.style.display = "none";
+            } else {
+                message.textContent = "❌ Leider verloren! Dreh am Glücksrad für eine zweite Chance!";
+                message.className = "message error";
+                wheelContainer.style.display = "block";
+            }
+        }
+
+        function spinWheel() {
+            const wheel = document.getElementById("wheel");
+            const wheelMessage = document.getElementById("wheel-message");
+
+            const spinDegrees = Math.random() < 0.5 ? 0 : 180; // 50% Gewinnchance
+            wheel.style.transform = `rotate(${spinDegrees + 1080}deg)`; // 3 volle Drehungen + Gewinn/Verlust
+
+            setTimeout(() => {
+                if (spinDegrees === 0) {
+                    wheelMessage.textContent = "🎉 Glückwunsch! Das Glücksrad hat gewonnen!";
+                    wheelMessage.className = "message success";
+                } else {
+                    wheelMessage.textContent = "❌ Leider verloren! Versuch es später erneut.";
+                    wheelMessage.className = "message error";
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

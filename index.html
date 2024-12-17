@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            font-size: 1.8em;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        nav a {
+            color: #8a4dbf;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #b38fd1;
+        }
+
+        .login-container {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(138, 77, 191, 0.5);
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            margin-top: 50px; /* Erhöhter Abstand */
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            color: #c0a3e5;
+        }
+
+        input, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        input {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        button {
+            background-color: #8a4dbf;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #72389e;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: #50fa7b;
+        }
+
+        .message.error {
+            color: #ff5555;
+        }
+
+        footer {
+            background-color: #222;
+            color: #ddd;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        Startseite
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">Über Uns</a>
+        <a href="#login">Startseite</a>
+        <a href="spiel.html">Spiel</a>
+    </nav>
+
+    <!-- Login-Container -->
+    <div class="login-container">
+        <h3>Admin Login</h3>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Benutzername" required>
+            <input type="password" id="password" placeholder="Passwort" required>
+            <button type="submit">Anmelden</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Test Website | Erstellt von raphael
+    </footer>
+
+    <!-- Script für die Login-Logik -->
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageBox = document.getElementById("message");
+
+            const adminUser = "admin";
+            const adminPass = "1234";
+
+            if (username === adminUser && password === adminPass) {
+                messageBox.textContent = "✅ Anmeldung erfolgreich! Willkommen, Admin.";
+                messageBox.className = "message success";
+            } else {
+                messageBox.textContent = "❌ Anmeldung fehlgeschlagen! Benutzername oder Passwort falsch.";
+                messageBox.className = "message error";
+            }
+        });
+    </script>
+</body>
+</html>
